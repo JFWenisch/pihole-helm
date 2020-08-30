@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "pihole-jfwenisch.fullname" . }}-pihole-dnsmasq-volumeclaim
+spec:
+  storageClassName: pihole-jfwenisch-dnsmasq-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

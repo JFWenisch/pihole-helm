@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pihole-jfwenisch.fullname" . }}
+  labels:
+    {{- include "pihole-jfwenisch.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "pihole-jfwenisch.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "pihole-jfwenisch.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "pihole-jfwenisch.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: pihole
+          persistentVolumeClaim:
+            claimName: {{ include "pihole-jfwenisch.fullname" . }}-pihole-volumeclaim
+        - name: pihole-dnsmasq
+          persistentVolumeClaim:
+            claimName: {{ include "pihole-jfwenisch.fullname" . }}-pihole-dnsmasq-volumeclaim
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - mountPath: "/etc/pihole"
+              name: pihole
+            - mountPath: "/etc/dnsmasq.d"
+              name: pihole-dnsmasq
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          env:
+            - name: TZ
+              value: {{ .Values.timezone }}
+            - name: WEBPASSWORD
+              value: {{ .Values.webpassword }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

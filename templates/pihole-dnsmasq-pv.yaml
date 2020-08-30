@@ -1,0 +1,14 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: {{ include "pihole-jfwenisch.fullname" . }}-dnsmasq-datavolume
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 1Gi
+  storageClassName: pihole-jfwenisch-dnsmasq-storage
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: {{ .Values.piholednsmasqdatamountpath }}
