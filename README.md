@@ -64,11 +64,23 @@ E:\pihole-helm>kubectl logs pihole-jfwenisch-646475b869-6hf56
 Assigning random password: IIics8YY
 ...
 ```
-  
+## Testing
+In general DNS Server are expected to run on port 53. To test the DNS you can utilize kubectl port-forward.
+Log into your kubernetes node and run
+
+
+```
+sudo microk8s.kubectl port-forward --address ${nodeIP} service/pihole-jfwenisch 53:53
+
+```
+
+
 ## Further information
 
 Pi-hole   https://pi-hole.net 
+
 Pi-hole src https://github.com/pi-hole/pi-hole
+
 Pi-hole docker https://hub.docker.com/r/pihole/pihole/
   
 
