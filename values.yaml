@@ -13,6 +13,7 @@ image:
 # Application specific envs
 timezone: Europe/Berlin
 webpassword:
+ipaddress: 10.0.0.6
 piholedatamountpath: /media/raid/kubernetes/piholedata
 piholednsmasqdatamountpath: /media/raid/kubernetes/piholednsmasqdata
 
