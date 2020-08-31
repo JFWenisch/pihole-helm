@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "pihole-jfwenisch.fullname" . }}-dns
+  labels:
+    {{- include "pihole-jfwenisch.labels" . | nindent 4 }}
+spec:
+  ports:
+    - port: 53
+      targetPort: 53
+      protocol: TCP
+      name: dns-tcp
+    - port: 53
+      targetPort: 53
+      protocol: UDP
+      name: dns-udp
+  externalIPs:
+  - {{ .Values.ipaddress }}
+  selector:
+    {{- include "pihole-jfwenisch.selectorLabels" . | nindent 4 }}

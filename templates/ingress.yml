@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "pihole-jfwenisch.fullname" . }}-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      rewrite /(.*) /$1 break;
+spec:
+  rules:
+  - http:
+      paths:
+        - path: /
+          backend:
+            serviceName: {{ include "pihole-jfwenisch.fullname" . }}-web
+            servicePort: http

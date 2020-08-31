@@ -46,7 +46,7 @@ default       pihole-jfwenisch-web        ClusterIP   10.152.183.196   <none>   
 
 ```
 
-To open the webui you can either change the port type of the pihole-jfwenisch-web svc to nodePort, use port forwarding or create an Ingress object if you are using ingress. To get started you can use kubectl port-forward to bind the ports to your localhost. 
+To open the webui you can either change the port type of the pihole-jfwenisch-web svc to nodePort, use port forwarding or create an Ingress object if you are using ingress. If you have ingress installed, an ingress object is deployed so you can just visit http://10.0.0.6/admin (Change the IP to your set IPaddress). Otherwise to get started you can use kubectl port-forward to bind the ports to your localhost. 
 
 ```
 PS E:\pihole-helm> kubectl port-forward service/pihole-jfwenisch-web 8088:80
