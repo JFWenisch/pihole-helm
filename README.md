@@ -15,22 +15,42 @@ mkdir /pihole/dnsmasq
 
 ```
 
-### Deploy
 
-  
+### Get the chart
+The packaged chart is hosted via github pages and can be found under https://github.com/JFWenisch/charts/tree/master/pihole. To add the chart repository run
 
+```
+helm repo add jfwenisch https://jfwenisch.github.io/charts
+helm repo update
+
+```
+
+Alternatively, you can pull the repository and install the chart from src
 ```
 
 git clone jfwenisch/pihole-helm
 cd pihole-helm
+
+```
+
+#### Install chart
+Run the following command to install from the official helm repo
+```
+helm install --generate-name --set webpassword=changeme --set ipaddress=192.168.1.9 --set timezone=Europe/Berlin --set piholedatamountpath=/pihole/data --set piholednsmasqdatamountpath=/pihole/dnsmasq  jfwenisch/pihole
+```
+or run the following from within the pihole-helm folder if you previously pulled the chart
+```
+
 helm install pihole-jfwenisch --set webpassword=changeme --set ipaddress=192.168.1.9 --set timezone=Europe/Berlin --set piholedatamountpath=/pihole/data --set piholednsmasqdatamountpath=/pihole/dnsmasq .
 
 ```
 
-Per default Europe/Berlin is set as timezone. If no webpassword is supplied a random password will be generated on startup
 
+Per default Europe/Berlin is set as timezone.
+If no webpassword is supplied a random password will be generated on startup
 
 ## Getting started
+
 3 different services are created. One for dns on Port 53, one for dhcp on port 67 and one for the pihole webservice on port 80 and 443.
 The services for dns and dhcp utilize [external IP](https://kubernetes.io/docs/tutorials/stateless-application/expose-external-ip-address/) to bind the ports to the host.
 
